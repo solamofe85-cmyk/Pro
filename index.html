@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pharos Alpha</title>
+
+<style>
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #f4f6f9;
+  color: #111;
+}
+
+.container {
+  max-width: 1100px;
+  margin: auto;
+  padding: 20px;
+}
+
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: white;
+  padding: 15px 20px;
+  border-radius: 20px;
+}
+
+header h1 {
+  font-size: 20px;
+}
+
+.badges span {
+  background: #eee;
+  padding: 6px 10px;
+  border-radius: 20px;
+  margin-left: 5px;
+  font-size: 12px;
+}
+
+.hero {
+  margin-top: 20px;
+  background: white;
+  padding: 25px;
+  border-radius: 20px;
+}
+
+.hero h2 {
+  font-size: 40px;
+  margin: 10px 0;
+}
+
+.hero p {
+  color: #555;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 15px;
+  margin-top: 20px;
+}
+
+.card {
+  background: white;
+  padding: 20px;
+  border-radius: 20px;
+}
+
+.metric {
+  margin-bottom: 15px;
+}
+
+.metric h4 {
+  margin: 0;
+  font-size: 12px;
+  color: gray;
+}
+
+.metric p {
+  font-size: 20px;
+  margin: 5px 0;
+}
+
+.terminal {
+  background: #111;
+  color: #0f0;
+  padding: 15px;
+  border-radius: 15px;
+  font-family: monospace;
+  height: 200px;
+  overflow-y: auto;
+}
+
+.links a {
+  display: inline-block;
+  margin: 5px;
+  padding: 8px 12px;
+  background: #eee;
+  border-radius: 20px;
+  text-decoration: none;
+  color: black;
+}
+
+footer {
+  text-align: center;
+  margin-top: 20px;
+  font-weight: bold;
+}
+</style>
+</head>
+
+<body>
+<div class="container">
+
+<header>
+  <h1>Pharos Alpha</h1>
+  <div class="badges">
+    <span>Live RPC</span>
+    <span>No Wallet</span>
+    <span>Builder</span>
+  </div>
+</header>
+
+<section class="hero">
+  <h2>Pharos in motion.</h2>
+  <p>
+    A builder-facing surface combining live mainnet + testnet RPC data 
+    with useful primitives across the Pharos ecosystem.
+  </p>
+</section>
+
+<div class="grid">
+
+<div class="card">
+  <h3>Network Pulse</h3>
+
+  <div class="metric">
+    <h4>Mainnet Block</h4>
+    <p id="mainnetBlock">Loading...</p>
+  </div>
+
+  <div class="metric">
+    <h4>Testnet Block</h4>
+    <p id="testnetBlock">Loading...</p>
+  </div>
+
+  <div class="metric">
+    <h4>Mainnet Gas</h4>
+    <p id="mainnetGas">Loading...</p>
+  </div>
+
+  <div class="metric">
+    <h4>Testnet Gas</h4>
+    <p id="testnetGas">Loading...</p>
+  </div>
+
+</div>
+
+<div class="card">
+  <h3>Live Feed</h3>
+  <div class="terminal" id="terminal">
+[boot] starting...
+  </div>
+</div>
+
+</div>
+
+<div class="grid">
+
+<div class="card">
+  <h3>Core Primitives</h3>
+  <ul>
+    <li>x402 – micropayment rails</li>
+    <li>Circle CCTP – cross-chain USDC</li>
+    <li>Oracles + SPNs – real-time data + execution</li>
+  </ul>
+</div>
+
+<div class="card">
+  <h3>Useful Links</h3>
+  <div class="links">
+    <a href="https://pharos.xyz">Main Site</a>
+    <a href="https://docs.pharos.xyz">Docs</a>
+    <a href="https://testnet.pharosnetwork.xyz/">Testnet</a>
+  </div>
+</div>
+
+</div>
+
+<footer>
+  Made for Pharos Ecosystem
+</footer>
+
+</div>
+
+<script>
+const endpoints = {
+  mainnet: "https://rpc.pharos.xyz",
+  testnet: "https://atlantic.dplabs-internal.com"
+};
+
+function hexToInt(hex) {
+  return parseInt(hex, 16);
+}
+
+function weiToGwei(hex) {
+  return (parseInt(hex, 16) / 1e9).toFixed(2);
+}
+
+async function rpc(url, method) {
+  const res = await fetch(url, {
+    method: "POST",
+    headers: {"Content-Type": "application/json"},
+    body: JSON.stringify({jsonrpc:"2.0", method, params:[], id:1})
+  });
+  const data = await res.json();
+  return data.result;
+}
+
+async function load() {
+  try {
+    const [mb, mg] = await Promise.all([
+      rpc(endpoints.mainnet, "eth_blockNumber"),
+      rpc(endpoints.mainnet, "eth_gasPrice")
+    ]);
+
+    const [tb, tg] = await Promise.all([
+      rpc(endpoints.testnet, "eth_blockNumber"),
+      rpc(endpoints.testnet, "eth_gasPrice")
+    ]);
+
+    document.getElementById("mainnetBlock").textContent = hexToInt(mb);
+    document.getElementById("testnetBlock").textContent = hexToInt(tb);
+    document.getElementById("mainnetGas").textContent = weiToGwei(mg)+" gwei";
+    document.getElementById("testnetGas").textContent = weiToGwei(tg)+" gwei";
+
+    document.getElementById("terminal").textContent =
+`[ok] mainnet block ${hexToInt(mb)}
+[ok] testnet block ${hexToInt(tb)}
+[status] live data fetched`;
+
+  } catch(e) {
+    document.getElementById("terminal").textContent =
+"[error] failed to fetch RPC";
+  }
+}
+
+load();
+setInterval(load, 20000);
+</script>
+
+</body>
+</html>
