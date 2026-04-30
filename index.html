@@ -6,56 +6,66 @@
 <title>Pharos Alpha</title>
 
 <style>
-body {
-  margin: 0;
-  font-family: Arial, sans-serif;
-  background: #f4f6f9;
-  color: #111;
+* {
+  box-sizing: border-box;
 }
 
-.container {
-  max-width: 1100px;
+body {
+  margin: 0;
+  font-family: "Segoe UI", sans-serif;
+  background: #0c0f14;
+  color: #e6e9ef;
+}
+
+.wrapper {
+  max-width: 1200px;
   margin: auto;
   padding: 20px;
 }
 
-header {
+/* NAV */
+.nav {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background: white;
+  background: #141922;
   padding: 15px 20px;
-  border-radius: 20px;
+  border-radius: 15px;
 }
 
-header h1 {
-  font-size: 20px;
+.logo {
+  font-weight: bold;
+  font-size: 18px;
 }
 
-.badges span {
-  background: #eee;
+.tags span {
+  background: #1f2633;
   padding: 6px 10px;
-  border-radius: 20px;
-  margin-left: 5px;
+  border-radius: 15px;
+  margin-left: 6px;
   font-size: 12px;
 }
 
+/* HERO */
 .hero {
   margin-top: 20px;
-  background: white;
-  padding: 25px;
+  padding: 30px;
+  background: linear-gradient(135deg, #1a2130, #12161f);
   border-radius: 20px;
 }
 
-.hero h2 {
-  font-size: 40px;
-  margin: 10px 0;
+.hero h1 {
+  font-size: 42px;
+  margin: 0;
 }
 
 .hero p {
-  color: #555;
+  margin-top: 10px;
+  color: #9aa3b2;
+  max-width: 600px;
 }
 
+/* GRID */
 .grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -63,74 +73,92 @@ header h1 {
   margin-top: 20px;
 }
 
+/* CARDS */
 .card {
-  background: white;
+  background: #141922;
   padding: 20px;
-  border-radius: 20px;
-}
-
-.metric {
-  margin-bottom: 15px;
-}
-
-.metric h4 {
-  margin: 0;
-  font-size: 12px;
-  color: gray;
-}
-
-.metric p {
-  font-size: 20px;
-  margin: 5px 0;
-}
-
-.terminal {
-  background: #111;
-  color: #0f0;
-  padding: 15px;
   border-radius: 15px;
+}
+
+.card h3 {
+  margin-top: 0;
+}
+
+/* METRICS */
+.metric {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+  padding: 10px;
+  background: #1b2230;
+  border-radius: 10px;
+}
+
+.metric span {
+  color: #9aa3b2;
+}
+
+/* TERMINAL */
+.terminal {
+  background: black;
+  color: #00ff9c;
+  padding: 15px;
+  border-radius: 10px;
   font-family: monospace;
-  height: 200px;
+  height: 220px;
   overflow-y: auto;
 }
 
+/* LIST */
+ul {
+  padding-left: 18px;
+  color: #9aa3b2;
+}
+
+/* LINKS */
 .links a {
   display: inline-block;
   margin: 5px;
   padding: 8px 12px;
-  background: #eee;
+  background: #1f2633;
   border-radius: 20px;
   text-decoration: none;
-  color: black;
+  color: #e6e9ef;
 }
 
-footer {
+.links a:hover {
+  background: #2a3245;
+}
+
+/* FOOTER */
+.footer {
   text-align: center;
   margin-top: 20px;
-  font-weight: bold;
+  color: #9aa3b2;
 }
 </style>
 </head>
 
 <body>
-<div class="container">
 
-<header>
-  <h1>Pharos Alpha</h1>
-  <div class="badges">
+<div class="wrapper">
+
+<div class="nav">
+  <div class="logo">Pharos Alpha</div>
+  <div class="tags">
     <span>Live RPC</span>
     <span>No Wallet</span>
     <span>Builder</span>
   </div>
-</header>
+</div>
 
-<section class="hero">
-  <h2>Pharos in motion.</h2>
+<div class="hero">
+  <h1>Pharos in Motion</h1>
   <p>
-    A builder-facing surface combining live mainnet + testnet RPC data 
-    with useful primitives across the Pharos ecosystem.
+    A builder-focused interface combining live mainnet and testnet RPC reads,
+    exposing the key primitives that power the Pharos ecosystem.
   </p>
-</section>
+</div>
 
 <div class="grid">
 
@@ -138,31 +166,30 @@ footer {
   <h3>Network Pulse</h3>
 
   <div class="metric">
-    <h4>Mainnet Block</h4>
-    <p id="mainnetBlock">Loading...</p>
+    <span>Mainnet Block</span>
+    <strong id="mainnetBlock">...</strong>
   </div>
 
   <div class="metric">
-    <h4>Testnet Block</h4>
-    <p id="testnetBlock">Loading...</p>
+    <span>Testnet Block</span>
+    <strong id="testnetBlock">...</strong>
   </div>
 
   <div class="metric">
-    <h4>Mainnet Gas</h4>
-    <p id="mainnetGas">Loading...</p>
+    <span>Mainnet Gas</span>
+    <strong id="mainnetGas">...</strong>
   </div>
 
   <div class="metric">
-    <h4>Testnet Gas</h4>
-    <p id="testnetGas">Loading...</p>
+    <span>Testnet Gas</span>
+    <strong id="testnetGas">...</strong>
   </div>
-
 </div>
 
 <div class="card">
   <h3>Live Feed</h3>
   <div class="terminal" id="terminal">
-[boot] starting...
+[boot] initializing...
   </div>
 </div>
 
@@ -173,26 +200,36 @@ footer {
 <div class="card">
   <h3>Core Primitives</h3>
   <ul>
-    <li>x402 – micropayment rails</li>
-    <li>Circle CCTP – cross-chain USDC</li>
-    <li>Oracles + SPNs – real-time data + execution</li>
+    <li>x402 – micropayment infrastructure</li>
+    <li>Circle CCTP – cross-chain USDC transfers</li>
+    <li>Oracles + SPNs – real-time execution + data</li>
   </ul>
 </div>
 
 <div class="card">
-  <h3>Useful Links</h3>
+  <h3>Build Angles</h3>
+  <ul>
+    <li>Agent-based commerce systems</li>
+    <li>RealFi infrastructure dashboards</li>
+    <li>Developer entry & ops layer</li>
+  </ul>
+</div>
+
+</div>
+
+<div class="card" style="margin-top:15px;">
+  <h3>Useful References</h3>
   <div class="links">
     <a href="https://pharos.xyz">Main Site</a>
+    <a href="https://pharos.xyz/devhub">DevHub</a>
     <a href="https://docs.pharos.xyz">Docs</a>
     <a href="https://testnet.pharosnetwork.xyz/">Testnet</a>
   </div>
 </div>
 
+<div class="footer">
+  Made for the Pharos Ecosystem
 </div>
-
-<footer>
-  Made for Pharos Ecosystem
-</footer>
 
 </div>
 
@@ -214,13 +251,18 @@ async function rpc(url, method) {
   const res = await fetch(url, {
     method: "POST",
     headers: {"Content-Type": "application/json"},
-    body: JSON.stringify({jsonrpc:"2.0", method, params:[], id:1})
+    body: JSON.stringify({
+      jsonrpc: "2.0",
+      method,
+      params: [],
+      id: 1
+    })
   });
   const data = await res.json();
   return data.result;
 }
 
-async function load() {
+async function update() {
   try {
     const [mb, mg] = await Promise.all([
       rpc(endpoints.mainnet, "eth_blockNumber"),
@@ -234,22 +276,24 @@ async function load() {
 
     document.getElementById("mainnetBlock").textContent = hexToInt(mb);
     document.getElementById("testnetBlock").textContent = hexToInt(tb);
-    document.getElementById("mainnetGas").textContent = weiToGwei(mg)+" gwei";
-    document.getElementById("testnetGas").textContent = weiToGwei(tg)+" gwei";
+    document.getElementById("mainnetGas").textContent = weiToGwei(mg) + " gwei";
+    document.getElementById("testnetGas").textContent = weiToGwei(tg) + " gwei";
 
     document.getElementById("terminal").textContent =
 `[ok] mainnet block ${hexToInt(mb)}
 [ok] testnet block ${hexToInt(tb)}
-[status] live data fetched`;
+[gas] mainnet ${weiToGwei(mg)} gwei
+[gas] testnet ${weiToGwei(tg)} gwei
+[status] system healthy`;
 
-  } catch(e) {
+  } catch (err) {
     document.getElementById("terminal").textContent =
-"[error] failed to fetch RPC";
+"[error] RPC fetch failed";
   }
 }
 
-load();
-setInterval(load, 20000);
+update();
+setInterval(update, 20000);
 </script>
 
 </body>
